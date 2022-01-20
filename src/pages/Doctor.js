@@ -1,63 +1,74 @@
 import { useContext } from "react"
-import { Col, Row } from "react-bootstrap"
+import { Button, Col, Container, Row, Tab, Table, Tabs } from "react-bootstrap"
 import diabetesContext from "../utils/diabetesContext"
 import { Link } from "react-router-dom"
+import RowPaitents from "../components/RowPaitents"
+
 function Doctor() {
-  const { profileDr, logout } = useContext(diabetesContext)
+  const { profileDr } = useContext(diabetesContext)
   if (!profileDr) return <h1>Loading...</h1>
+
   return (
     <>
-      <h1>i'm DR</h1>
-
-      <>
-        <Row>
-          <Col md="4">
-            <img
-              variant="top"
-              src={profileDr.avatar}
-              width="100%"
-              style={{ borderRadius: "10px", margin: "20px" }}
-              alt=" "
-            />
-          </Col>
-          <Col>
-            <h1>
-              {profileDr.firstName} {profileDr.lastName}
-            </h1>
-            <h6>{profileDr.email}</h6>
-
-            {profileDr.paitents.map(paitent => (
-              <>
-                <h4>
-                  Paitents:
-                  <h6>
-                    {paitent.firstName} {paitent.midName} {paitent.lastName}
-                  </h6>
-                  <p>{paitent.MNR}</p>
-                  {paitent.questions.map(question => (
-                    <h1>{question.question}</h1>
+      <Container>
+        <Tabs id="controlled-tab-example" className="mb-3" style={{ marginTop: 70 }}>
+          <Tab eventKey="profile" title="Profile">
+            <Col md="4">
+              <img
+                variant="top"
+                src={profileDr.avatar}
+                width="100%"
+                style={{ borderRadius: "10px", margin: "20px" }}
+                alt=" "
+              />
+              <h1>
+                DR: {profileDr.firstName} {profileDr.lastName}
+              </h1>
+              Email: <h6>{profileDr.email}</h6>
+            </Col>
+          </Tab>
+          <Tab eventKey="paitents" title="Paitents">
+            <Row>
+              <Col>
+                <Table>
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>photo</th>
+                      <th>full Name</th>
+                      <th> action</th>
+                    </tr>
+                  </thead>
+                  {profileDr.paitents.map(paitent => (
+                    <>
+                      <RowPaitents paitent={paitent} />
+                    </>
                   ))}
-                </h4>
+                </Table>
+              </Col>
+            </Row>
+          </Tab>
+          <Tab eventKey="visits" title="Visits">
+            {profileDr.visits.map(visit => {
+              const date = new Date(visit.date)
 
-                <h1>Visits:</h1>
-                {profileDr.visits.map(visit => {
-                  const date = new Date(visit.date)
-
-                  return (
-                    <h6>
-                      {date.toUTCString()} {visit.idPaitent.firstName} {visit.idPaitent.midName}{" "}
-                      {visit.idPaitent.lastName} {visit.idPaitent.MNR}
-                    </h6>
-                  )
-                })}
-              </>
-            ))}
-          </Col>
-        </Row>
-        <Link to="/" onClick={logout}>
-          <button> logout</button>
-        </Link>
-      </>
+              return (
+                <Table striped bordered hover>
+                  <tbody>
+                    <tr>
+                      <td>{date.toUTCString()}</td>
+                      <td>
+                        {visit.idPaitent.firstName} {visit.idPaitent.midName} {visit.idPaitent.lastName}{" "}
+                      </td>
+                      <td>{visit.idPaitent.MNR}</td>
+                    </tr>
+                  </tbody>
+                </Table>
+              )
+            })}
+          </Tab>
+        </Tabs>
+      </Container>
     </>
   )
 }

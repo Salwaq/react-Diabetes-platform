@@ -1,6 +1,8 @@
 import { useContext } from "react"
 import diabetesContext from "../utils/diabetesContext"
 
+import SendIcon from "@mui/icons-material/Send"
+
 import { Button, Col, Form, Modal, Row } from "react-bootstrap"
 
 function AddQuestionModal(props) {
@@ -8,7 +10,7 @@ function AddQuestionModal(props) {
   const { addQuestion } = useContext(diabetesContext)
   return (
     <>
-      <Modal show={show} onHide={() => setShow(false)}>
+      <Modal show={show} onHide={() => setShow(false)} centered>
         <Form onSubmit={e => addQuestion(e, doctorId)}>
           <Modal.Header closeButton>
             <Modal.Title>Add Question</Modal.Title>
@@ -27,8 +29,8 @@ function AddQuestionModal(props) {
             <Button variant="secondary" onClick={() => setShow(false)}>
               Close
             </Button>
-            <Button variant="primary" type="submit" onClick={() => setShow(false)}>
-              Add Q
+            <Button variant="success" type="submit" onClick={() => setShow(false)}>
+              Send <SendIcon />
             </Button>
           </Modal.Footer>
         </Form>

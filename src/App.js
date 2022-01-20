@@ -5,13 +5,15 @@ import { toast, ToastContainer } from "react-toastify"
 import diabetesContext from "./utils/diabetesContext"
 import PaitentProfile from "./pages/PaitentProfile"
 import Doctor from "./pages/Doctor"
-import LoginDr from "./pages/LoginDr"
-import LoginPaitent from "./pages/LoginPaitent"
 import Home from "./pages/Home"
+import Style from "./Style.css"
+import Navbar from "./components/Navbar"
+import Footer from "./components/Footer"
 
 function App() {
   const [profile, setProfile] = useState("")
   const [profileDr, setProfileDr] = useState(null)
+  const [articals, setArticals] = useState([])
   const navigate = useNavigate()
 
   const getProfilePaitent = async () => {
@@ -21,6 +23,16 @@ function App() {
       },
     })
     setProfile(response.data)
+    console.log(response.data)
+  }
+
+  const getArticals = async () => {
+    const response = await axios.get("http://localhost:8000/api/article", {
+      headers: {
+        Authorization: localStorage.tokenDiabetes,
+      },
+    })
+    setArticals(response.data)
     console.log(response.data)
   }
 
@@ -34,13 +46,15 @@ function App() {
       setProfileDr(response.data)
       console.log(response.data)
     } catch (error) {
-      if (error.response) toast.error(error.response.data)
-      else console.log(error)
+      console.log(error)
     }
   }
   useEffect(() => {
-    getProfilePaitent()
-    getProfileDr()
+    if (localStorage.tokenDiabetes) {
+      getArticals()
+      getProfilePaitent()
+      getProfileDr()
+    }
   }, [])
 
   const loginPaitent = async e => {
@@ -57,8 +71,7 @@ function App() {
       getProfilePaitent()
       navigate("/paitentProfile")
     } catch (error) {
-      if (error.response) toast.error(error.response.data)
-      else console.log(error)
+      console.log(error)
     }
   }
   const loginDr = async e => {
@@ -100,6 +113,89 @@ function App() {
     }
   }
 
+  const addInfo = async (e, paitentId) => {
+    e.preventDefault()
+    try {
+      const form = e.target
+      const infoBody = {
+        bloodType: form.elements.bloodType.value,
+        weight: form.elements.weight.value,
+        height: form.elements.height.value,
+        diabetesType: form.elements.diabetesType.value,
+      }
+      await axios.post(`http://localhost:8000/api/paitent/${paitentId}/info"`, infoBody, {
+        headers: {
+          Authorization: localStorage.tokenDiabetes,
+        },
+      })
+      toast.success("add information from paitent success")
+      getProfileDr()
+    } catch (error) {
+      if (error.response) toast.error(error.response.data)
+      else console.log(error)
+    }
+  }
+
+  const addCd = async (e, paitentId) => {
+    e.preventDefault()
+    try {
+      const form = e.target
+      const cdBody = {
+        cumulativeDiabetes: form.elements.cumulativeDiabetes.value,
+      }
+      await axios.post(`http://localhost:8000/api/paitent/${paitentId}/info/cd"`, cdBody, {
+        headers: {
+          Authorization: localStorage.tokenDiabetes,
+        },
+      })
+      toast.success("add information from paitent success")
+      getProfileDr()
+    } catch (error) {
+      if (error.response) toast.error(error.response.data)
+      else console.log(error)
+    }
+  }
+
+  const addVisit = async (e, idPaitent) => {
+    e.preventDefault()
+    try {
+      const form = e.target
+      const visitBody = {
+        date: form.elements.date.value,
+      }
+      await axios.post(`http://localhost:8000/api/doctors/${idPaitent}/visit`, visitBody, {
+        headers: {
+          Authorization: localStorage.tokenDiabetes,
+        },
+      })
+      toast.success("add visit success")
+      getProfileDr()
+    } catch (error) {
+      if (error.response) toast.error(error.response.data)
+      else console.log(error)
+    }
+  }
+
+  const addAnswer = async (e, questionId) => {
+    e.preventDefault()
+    try {
+      const form = e.target
+      const questionBody = {
+        answer: form.elements.answer.value,
+      }
+      await axios.post(`http://localhost:8000/api/doctors/${questionId}`, questionBody, {
+        headers: {
+          Authorization: localStorage.tokenDiabetes,
+        },
+      })
+      toast.success("add Answer success")
+      getProfileDr()
+    } catch (error) {
+      if (error.response) toast.error(error.response.data)
+      else console.log(error)
+    }
+  }
+
   const logout = async () => {
     localStorage.removeItem("tokenDiabetes")
     console.log("logout success")
@@ -112,19 +208,23 @@ function App() {
     addQuestion,
     profileDr,
     logout,
+    addVisit,
+    addAnswer,
+    addInfo,
+    addCd,
+    articals,
   }
 
   return (
     <diabetesContext.Provider value={store}>
       <ToastContainer />
+      <Navbar />
       <Home />
-
       <Routes>
         <Route path="/paitentProfile" element={<PaitentProfile />} />
         <Route path="/doctor" element={<Doctor />} />
-        <Route path="/loginDr" element={<LoginDr />}></Route>
-        <Route path="/loginPaitent" element={<LoginPaitent />}></Route>
       </Routes>
+      <Footer />
     </diabetesContext.Provider>
   )
 }
