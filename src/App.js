@@ -123,7 +123,7 @@ function App() {
         height: form.elements.height.value,
         diabetesType: form.elements.diabetesType.value,
       }
-      await axios.post(`http://localhost:8000/api/paitent/${paitentId}/info"`, infoBody, {
+      await axios.post(`http://localhost:8000/api/paitent/${paitentId}/info`, infoBody, {
         headers: {
           Authorization: localStorage.tokenDiabetes,
         },
@@ -143,12 +143,12 @@ function App() {
       const cdBody = {
         cumulativeDiabetes: form.elements.cumulativeDiabetes.value,
       }
-      await axios.post(`http://localhost:8000/api/paitent/${paitentId}/info/cd"`, cdBody, {
+      await axios.post(`http://localhost:8000/api/paitent/${paitentId}/info/cd`, cdBody, {
         headers: {
           Authorization: localStorage.tokenDiabetes,
         },
       })
-      toast.success("add information from paitent success")
+      toast.success("add cumulative Diabetes from paitent success")
       getProfileDr()
     } catch (error) {
       if (error.response) toast.error(error.response.data)

@@ -4,7 +4,7 @@ import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined"
 import { AppBar } from "@mui/material"
 function Footer() {
   return (
-    <AppBar position="relative" sx={{ zIndex: theme => theme.zIndex.drawer + 1, top: "auto", bottom: 0 }}>
+    <AppBar position="relative" sx={{ zIndex: theme => theme.zIndex.drawer - 1, top: "auto", bottom: 0 }}>
       <footer id="Footer">
         <section id="sectionFooter">
           <h4>About</h4>

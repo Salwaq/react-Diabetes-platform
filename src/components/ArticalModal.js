@@ -1,5 +1,4 @@
-import { useState } from "react"
-import { Modal } from "react-bootstrap"
+import { Image, Modal } from "react-bootstrap"
 
 function ArticalModal(props) {
   const { artical, setShowArtical, showArtical } = props
@@ -17,6 +16,7 @@ function ArticalModal(props) {
           <Modal.Title id="contained-modal-title-vcenter">{artical?.title}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          <Image src={artical.image} height={200} className="imgArtical"></Image>
           <p>{artical?.description}</p>
         </Modal.Body>
       </Modal>

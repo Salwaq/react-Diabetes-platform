@@ -1,8 +1,8 @@
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import { Button, Col, Container, Row, Tab, Table, Tabs } from "react-bootstrap"
 import diabetesContext from "../utils/diabetesContext"
-import { Link } from "react-router-dom"
 import RowPaitents from "../components/RowPaitents"
+import QuestionRow from "../components/QuestionRow"
 
 function Doctor() {
   const { profileDr } = useContext(diabetesContext)
@@ -10,7 +10,7 @@ function Doctor() {
 
   return (
     <>
-      <Container>
+      <Container style={{ marginBottom: 300 }}>
         <Tabs id="controlled-tab-example" className="mb-3" style={{ marginTop: 70 }}>
           <Tab eventKey="profile" title="Profile">
             <Col md="4">
@@ -36,7 +36,9 @@ function Doctor() {
                       <th>#</th>
                       <th>photo</th>
                       <th>full Name</th>
+                      <th> question</th>
                       <th> action</th>
+                      <th> </th>
                     </tr>
                   </thead>
                   {profileDr.paitents.map(paitent => (
@@ -51,7 +53,7 @@ function Doctor() {
           <Tab eventKey="visits" title="Visits">
             {profileDr.visits.map(visit => {
               const date = new Date(visit.date)
-
+              // date.sort((a, b) => b.date - a.date)
               return (
                 <Table striped bordered hover>
                   <tbody>
@@ -66,6 +68,26 @@ function Doctor() {
                 </Table>
               )
             })}
+          </Tab>
+          <Tab eventKey="question" title="question">
+            {/* {paitent.questions.map(question => (
+                              <h1>{question.question}</h1>
+                            ))} */}
+
+            <Table striped bordered hover>
+              <thead>
+                <tr>
+                  <th>Q?</th>
+                  <th>answer</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {profileDr.questions.map(question => {
+                  return <QuestionRow question={question} />
+                })}
+              </tbody>
+            </Table>
           </Tab>
         </Tabs>
       </Container>

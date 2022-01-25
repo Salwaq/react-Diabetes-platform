@@ -14,11 +14,16 @@ import IconButton from "@mui/material/IconButton"
 import Typography from "@mui/material/Typography"
 import { red } from "@mui/material/colors"
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
-import { Button } from "@mui/material"
 import SendIcon from "@mui/icons-material/Send"
 import Box from "@mui/material/Box"
 import Container from "@mui/material/Container"
 import ArticalModal from "../components/ArticalModal"
+import TextField from "@mui/material/TextField"
+import ImageListItem from "@mui/material/ImageListItem"
+import ImageListItemBar from "@mui/material/ImageListItemBar"
+import InfoIcon from "@mui/icons-material/Info"
+import { Button, CardActionArea } from "@mui/material"
+import ArticalRow from "../components/ArticalRow"
 
 const ExpandMore = styled(props => {
   const { expand, ...other } = props
@@ -32,19 +37,17 @@ const ExpandMore = styled(props => {
 }))
 
 function PaitentProfile() {
-  const [showArtical, setShowArtical] = useState(false)
   const [show, setShow] = useState(false)
   const [expanded, setExpanded] = useState(false)
 
   const handleExpandClick = () => {
     setExpanded(!expanded)
   }
-
   const { profile, articals } = useContext(diabetesContext)
   if (!profile) return <h1>Loading...</h1>
 
   const lastVisit = profile.visits[profile.visits.length - 1]
-  const lastDate = new Date(lastVisit.date)
+  const lastDate = new Date(lastVisit?.date)
 
   return (
     <div className="paitentProfile">
@@ -162,9 +165,11 @@ function PaitentProfile() {
                     {profile.questions.map(question => (
                       <>
                         <span>
-                          <h6>Q:</h6> <h6>{question.question}</h6>{" "}
+                          <h6 style={{ backGround: "black" }}>Q: {question.question}</h6>
                         </span>
-                        <h6>A:</h6> <p>{question.answer}</p>
+                        <h6>
+                          A:<p>{question.answer}</p>
+                        </h6>
                       </>
                     ))}
                   </Typography>
@@ -174,24 +179,103 @@ function PaitentProfile() {
             </Box>
           </Card>
         </div>
-        <Card sx={{ display: "flex", maxWidth: 700 }} id="cardPaitent">
-          <h6>Cumulative Diabetes Average : {profile.infoPaitent?.CdAverage}</h6>
-          {profile.infoPaitent?.cumulativeDiabetes?.map(cumulativeDiabete => {
-            return <h6>{cumulativeDiabete.cumulativeDiabetes}:</h6>
-          })}
-        </Card>
+        <br></br>
+
+        {/* Calculators */}
+        <div id="cardRow">
+          <Card sx={{ maxWidth: 400 }}>
+            <CardActionArea>
+              <CardMedia
+                component="img"
+                height="150"
+                image="https://images.pexels.com/photos/6823568/pexels-photo-6823568.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+                alt="green iguana"
+              />
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="div">
+                  Cumulative Diabetes
+                </Typography>{" "}
+                <br />
+                <Typography variant="body2" color="text.secondary">
+                  should be on your mind daily to learn how to manage and treat your blood sugar on you own, which is
+                  better for your health in the short and long term. The success of diabetes treatment depends on how
+                  well you control your blood sugar.
+                </Typography>
+                <br />
+                <br />
+                <TextField
+                  required
+                  id="outlined-required"
+                  label="HbA1c"
+                  defaultValue={profile.infoPaitent?.CdAverage}
+                />
+              </CardContent>
+            </CardActionArea>
+            <CardActions></CardActions>
+          </Card>
+          <Card sx={{ maxWidth: 270 }}>
+            <CardActionArea>
+              <ImageListItem>
+                <img
+                  src="https://images.pexels.com/photos/5342565/pexels-photo-5342565.jpeg?auto=compress&cs=tinysrgb&dpr=2"
+                  alt=" "
+                  height="15"
+                  loading="lazy"
+                />
+                <ImageListItemBar
+                  title="below 5.7 percent"
+                  subtitle="Normal"
+                  actionIcon={
+                    <IconButton sx={{ color: "rgba(255, 255, 255, 0.54)" }} aria-label={`info about `}>
+                      <InfoIcon />
+                    </IconButton>
+                  }
+                />
+              </ImageListItem>
+              <ImageListItem>
+                <img
+                  src="https://images.pexels.com/photos/5469165/pexels-photo-5469165.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+                  alt=" "
+                  loading="lazy"
+                />
+                <ImageListItemBar
+                  title="	5.7 to 6.4 percent"
+                  subtitle="Prediabetes"
+                  actionIcon={
+                    <IconButton sx={{ color: "rgba(255, 255, 255, 0.54)" }} aria-label={`info about `}>
+                      <InfoIcon />
+                    </IconButton>
+                  }
+                />
+              </ImageListItem>
+              <ImageListItem>
+                <img
+                  src="https://www.genengnews.com/wp-content/uploads/2020/08/Aug28_2020_Getty_1213259073_DiabetesTestingEquipment-scaled-e1598623827835.jpg"
+                  alt=" "
+                  loading="lazy"
+                />
+                <ImageListItemBar
+                  title="	6.5 percent or above"
+                  subtitle="Danger Diabetes"
+                  actionIcon={
+                    <IconButton sx={{ color: "rgba(255, 255, 255, 0.54)" }} aria-label={`info about `}>
+                      <InfoIcon />
+                    </IconButton>
+                  }
+                />
+              </ImageListItem>
+            </CardActionArea>
+          </Card>
+        </div>
       </Container>
+
       {/* side bar  */}
       <div class="container1">
         {" "}
         {articals.map(artical => {
           return (
             <>
-              <Button className="buttonArtical" onClick={() => setShowArtical(true)}>
-                {artical.title}
-              </Button>
-
-              <ArticalModal setShowArtical={setShowArtical} showArtical={showArtical} artical={artical} />
+              <ArticalRow artical={artical} />
             </>
           )
         })}
