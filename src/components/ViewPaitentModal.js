@@ -47,12 +47,12 @@ function ViewPaitentModal(props) {
                 <strong>infoPaitent:</strong>
                 <ListGroup>
                   <ListGroup.Item>
-                    {/* <span style={{ marginLeft: 10 }}>{paitent.infoPaitent}</span> */}
-                    <h6> bloodType :{paitent.infoPaitent.bloodType}</h6>
-                    <h6>weight</h6> {paitent.infoPaitent.weight}
-                    <h6>height</h6>
-                    {paitent.infoPaitent.height}
-                    <h6>cumulativeDiabetes</h6>
+                    <h6>Blood Type : {paitent.infoPaitent?.bloodType}</h6>
+                    <h6>Weight : {paitent.infoPaitent?.weight}</h6>
+                    <h6>Height : {paitent.infoPaitent?.height}</h6>
+                    <h6>Diabetes Type: {paitent.infoPaitent?.diabetesType}</h6>
+                    <h6> cumulative Diabetes Average: {paitent.infoPaitent.CdAverage}</h6>
+
                     {/* <ListGroup>
                       {paitent.infoPaitent.cumulativeDiabetes.map(cumulativeDiabete => (
                         <ListGroup.Item>
@@ -61,8 +61,6 @@ function ViewPaitentModal(props) {
                       ))}
                     </ListGroup> */}
                   </ListGroup.Item>
-                  <h6> cumulative Diabetes Average</h6>
-                  {paitent.infoPaitent.CdAverage}
                 </ListGroup>
               </ListGroup.Item>
             ) : null}

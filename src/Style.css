@@ -128,7 +128,7 @@
 }
 
 .paitentProfile {
-    background-image: url("./utils/DB.jpg");
+    background-color: rgb(81, 138, 160);
     background-repeat: no-repeat;
     background-size: cover;
     padding: 25px 50px;
